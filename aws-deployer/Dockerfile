@@ -1,4 +1,4 @@
-FROM alpine/helm:3.2.1
+FROM alpine/helm:3.8.1
 
 # setup AWS CLI
 RUN apk add --no-cache curl python3 py3-pip && pip3 install --upgrade pip && pip3 install awscli && rm -rf /var/cache/apk/*
