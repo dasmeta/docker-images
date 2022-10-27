@@ -3,6 +3,6 @@
 
 ## to publish the changes
 ```sh
-docker build . -t dasmeta/aws-deployer:0.3.0 --no-cache --platform linux/amd64
-docker push dasmeta/aws-deployer:0.3.0
+docker build . -t dasmeta/prerender:0.0.2 --no-cache --platform linux/amd64
+docker push dasmeta/prerender:0.0.2
 ```

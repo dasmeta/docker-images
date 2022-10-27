@@ -18,5 +18,8 @@ deploy:
       --set image.tag=$CI_COMMIT_SHA
       --wait
 
-# How to build
-make build IMAGE=aws-deployer TAG=0.1.0
+# How to build/publish
+```sh
+docker build . -t dasmeta/aws-deployer:0.3.0 --no-cache --platform linux/amd64
+docker push dasmeta/aws-deployer:0.3.0
+```
