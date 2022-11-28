@@ -1,0 +1,9 @@
+click
+rq
+rq-scheduler
+setproctitle
+python-dotenv
+redis
+moment
+msgspec
+requests
