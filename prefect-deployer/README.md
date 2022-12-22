@@ -2,6 +2,6 @@
 #### For mor information visist https://www.prefect.io/
 ### TL;DR
 ```shell
-docker build --platform linux/amd64 -t dasmeta/prefect-deployer:0.1.3 .
-docker push dasmeta/prefect-deployer:0.1.3
+docker build --platform linux/amd64 -t dasmeta/prefect-deployer:0.1.4 .
+docker push dasmeta/prefect-deployer:0.1.4
 ```
