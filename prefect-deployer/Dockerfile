@@ -17,7 +17,7 @@ RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/
     apt-get install helm
 
 # Install prefect
-RUN pip install -U "prefect==2.7.1" && \
+RUN pip install -U "prefect==2.7.3" && \
     pip install s3fs && \
     pip install gcsfs && \
     pip install adlfs
