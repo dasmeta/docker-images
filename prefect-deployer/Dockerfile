@@ -10,8 +10,14 @@ RUN apt-get update && \
     apt-get install python3 python3-pip -y && \
     ln -s /usr/bin/python3 /usr/bin/python
 
+RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+    apt-get install apt-transport-https --yes && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
+    apt-get update && \
+    apt-get install helm
+
 # Install prefect
-RUN pip install -U "prefect==2.6.7" && \
+RUN pip install -U "prefect==2.7.3" && \
     pip install s3fs && \
     pip install gcsfs && \
     pip install adlfs
