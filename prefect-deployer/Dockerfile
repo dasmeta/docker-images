@@ -16,6 +16,11 @@ RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/
     apt-get update && \
     apt-get install helm
 
+# Install yq
+RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && \
+    chmod a+x /usr/local/bin/yq
+
+
 # Install prefect
 RUN pip install -U "prefect==2.7.3" && \
     pip install s3fs && \
