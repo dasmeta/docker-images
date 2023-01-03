@@ -1,0 +1,32 @@
+net:
+  bindIp: "0.0.0.0"
+  port: 3307
+  ssl:
+    mode: "disabled"
+
+mongodb:
+  net:
+    uri: MONGO_URL
+    ssl:
+      enabled: false
+
+systemLog:
+  quiet: false
+  verbosity: 1
+  logRotate: "rename"
+
+schema:
+  refreshIntervalSecs: 0
+  stored:
+    mode: "custom"
+    source: "mongosqld_data"
+    name: "mySchema"
+  sample:
+    size: 1000
+    namespaces: ["*.*"]
+
+processManagement:
+  service:
+    name: "mongosql"
+    displayName: "MongoSQL Service"
+    description: "MongoSQL accesses MongoDB data with SQL"
