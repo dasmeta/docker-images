@@ -14,17 +14,12 @@ WORKDIR /home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5
 
 RUN install -m755 bin/mongo* /usr/local/bin/
 
-COPY ./mongosqld-config.yml /home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5/mongosqld-config.yml
-COPY ./mongosql_config.sh /home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5/mongosql_config.sh
-
 RUN mkdir /home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5/log && \ 
     cd log && \
     touch sqld.log
 
 WORKDIR /home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5
 
-RUN chmod +x ./mongosql_config.sh
-
 EXPOSE 3307
 
-ENTRYPOINT ["/home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5/mongosql_config.sh"]
+CMD ["mongosqld", "--config=/home/mongobi/mongodb-bi-linux-x86_64-ubuntu1804-v2.14.5/example-mongosqld-config.yml"]
