@@ -31,6 +31,14 @@ RUN pip install -U "prefect==2.7.3" && \
     pip install gcsfs && \
     pip install adlfs
 
+
+RUN apt-get update &&  \
+    apt-get install -y curl jq
+
+RUN curl -sL https://git.io/autotag-install | sh -- && \
+    curl -sL https://git.io/autotag-install | sh -s -- -b /usr/bin
+
+
 COPY ./requirements.txt ./requirements.txt
 
 RUN pip install -r ./requirements.txt
