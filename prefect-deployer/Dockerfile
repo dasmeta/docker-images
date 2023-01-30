@@ -26,7 +26,7 @@ RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/d
 
 
 # Install prefect
-RUN pip install -U "prefect==2.7.3" && \
+RUN pip install -U "prefect==2.7.10" && \
     pip install s3fs && \
     pip install gcsfs && \
     pip install adlfs
