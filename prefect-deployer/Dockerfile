@@ -5,6 +5,10 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     unzip awscliv2.zip && \
     ./aws/install
 
+#Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
 # Install python & pip
 RUN apt-get update && \
     apt-get install python3 python3-pip -y && \
@@ -22,10 +26,18 @@ RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/d
 
 
 # Install prefect
-RUN pip install -U "prefect==2.7.3" && \
+RUN pip install -U "prefect==2.7.10" && \
     pip install s3fs && \
     pip install gcsfs && \
     pip install adlfs
+
+
+RUN apt-get update &&  \
+    apt-get install -y curl jq
+
+RUN curl -sL https://git.io/autotag-install | sh -- && \
+    curl -sL https://git.io/autotag-install | sh -s -- -b /usr/bin
+
 
 COPY ./requirements.txt ./requirements.txt
 
