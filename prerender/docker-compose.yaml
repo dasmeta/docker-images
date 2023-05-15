@@ -1,0 +1,7 @@
+services:
+  prerender:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - CACHE_ENABLED=true
