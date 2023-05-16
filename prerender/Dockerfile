@@ -1,23 +1,23 @@
-FROM node:17-alpine3.15
+FROM node:20-alpine3.17
 
-ENV CHROMIUM_VERSION 99.0.4844.84-r0
-ENV PRERENDER_VERSION 5.19.0
-# ENV PRERENDER_MEMORY_VERSION 1.0.2
-ENV DISPLAY :99.0
+ENV CHROME_BIN=/usr/bin/chromium-browser
+ENV CHROME_PATH=/usr/lib/chromium/
 
-WORKDIR /app
+# install chromium, tini and clear cache
+RUN apk add --update-cache chromium tini \
+ && rm -rf /var/cache/apk/* /tmp/*
 
-RUN addgroup -S prerender && adduser -S -g prerender prerender  && \
-    apk add --no-cache ca-certificates && \
-    apk add chromium=${CHROMIUM_VERSION} --no-cache --repository http://nl.alpinelinux.org/alpine/v3.15/community && \
-    npm install prerender@${PRERENDER_VERSION}  && \
-#    npm install prerender-memory-cache@${PRERENDER_MEMORY_VERSION} && \
-    rm -rf /var/cache/apk/*
+USER node
+WORKDIR "/home/node"
 
-COPY server.js /app/server.js
+COPY ./package.json .
+COPY ./yarn.lock .
+COPY ./server.js .
 
-USER prerender
+# install npm packages
+RUN yarn
 
 EXPOSE 3000
 
-CMD [ "node", "server.js" ]
+ENTRYPOINT ["tini", "--"]
+CMD ["node", "server.js"]
