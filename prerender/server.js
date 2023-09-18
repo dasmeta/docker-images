@@ -1,26 +1,26 @@
-#!/usr/bin/env node
-const prerender = require('prerender');
-// const cache = require('prerender-memory-cache');
+const prerender = require("prerender");
+const cache = require("prerender-memory-cache");
 
 
 const server = prerender({
-    chromeLocation: "/usr/lib/chromium/chrome",
+    chromeLocation: "/usr/bin/chromium-browser",
+    forwardHeaders: true,
     chromeFlags: [
-      "--headless",
-      "--disable-gpu",
-      "--remote-debugging-port=9222",
-      "--hide-scrollbars",
-      "--no-sandbox",
-      "--disk-cache-dir=/tmp/chromium",
-    ],
-  });
+        "--headless",
+        "--disable-gpu",
+        "--remote-debugging-port=9222",
+        "--no-sandbox",
+        "--hide-scrollbars",
+        "--disable-dev-shm-usage",
+    ]
+});
 
-server.use(prerender.sendPrerenderHeader());
-server.use(prerender.browserForceRestart());
-// server.use(prerender.blockResources());
-server.use(prerender.removeScriptTags());
+server.use(prerender.blacklist());
 server.use(prerender.httpHeaders());
-// server.use(cache);
+server.use(prerender.removeScriptTags());
 
+if (process.env.CACHE_ENABLED === "true") {
+    server.use(cache);
+}
 
 server.start();
