@@ -1,14 +1,14 @@
-FROM php:8.2-fpm
+FROM php:7.3-fpm
 
 RUN apt update && \
     apt install -y \
-        git \
-        libicu-dev \
-        libzip-dev \
-        unzip \
-        nginx \
-        libjpeg62-turbo-dev \
-        libpng-dev \
+    git \
+    libicu-dev \
+    libzip-dev \
+    unzip \
+    nginx \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install calendar gd intl pdo_mysql zip opcache mysqli sockets exif
