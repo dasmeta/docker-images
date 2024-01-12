@@ -9,10 +9,20 @@ RUN apt update && \
     nginx \
     libjpeg62-turbo-dev \
     libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    jpegoptim optipng pngquant gifsicle \
+    gcc make autoconf libc-dev pkg-config libmagickwand-dev \
+    default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-freetype-dir=/usr/include/
 RUN docker-php-ext-install calendar gd intl pdo_mysql zip opcache mysqli sockets exif
+RUN docker-php-ext-enable calendar gd intl pdo_mysql zip opcache mysqli sockets exif
 RUN docker-php-ext-enable opcache
+
+RUN pecl install redis && echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini
+RUN pecl install imagick && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/docker-php-ext-imagic.ini
 
 COPY docker-php-ext-opcache.ini /usr/local/etc/php/conf.d
 COPY general.ini /usr/local/etc/php/conf.d
