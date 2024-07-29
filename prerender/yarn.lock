@@ -91,6 +91,14 @@ chrome-remote-interface@^0.30.0:
     commander "2.11.x"
     ws "^7.2.0"
 
+chrome-remote-interface@^0.33.2:
+  version "0.33.2"
+  resolved "https://registry.yarnpkg.com/chrome-remote-interface/-/chrome-remote-interface-0.33.2.tgz#7b057b5d3238753e5ce790b01f1a1338d5c0388f"
+  integrity sha512-wvm9cOeBTrb218EC+6DteGt92iXr2iY0+XJP30f15JVDhqvWvJEVACh9GvUm8b9Yd8bxQivaLSb8k7mgrbyomQ==
+  dependencies:
+    commander "2.11.x"
+    ws "^7.2.0"
+
 commander@2.11.x:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
@@ -394,10 +402,10 @@ prerender-memory-cache@^1.0.2:
   dependencies:
     cache-manager "^2.6.0"
 
-prerender@^5.20.2:
-  version "5.20.2"
-  resolved "https://registry.yarnpkg.com/prerender/-/prerender-5.20.2.tgz#5335801a7c7451c5b91e8375e26ac1a1f9162eb7"
-  integrity sha512-PZ3FuSmXgXqGJyaTHm/HWSu/zSthh9EVEJ2rY/mlDLxh7KiADOyzhWq74cDpEm16pzViT0ApPBvk/mo1L5mHpw==
+prerender@^5.21.5:
+  version "5.21.5"
+  resolved "https://registry.yarnpkg.com/prerender/-/prerender-5.21.5.tgz#58254232a5c020d45009f8db3bbe8b009ac21ec2"
+  integrity sha512-Gmah+shpqP+iiwERUKvY1delLSJY0Tu33KWrbospj217RQaerTU8285UMR4fzkBnOnx5kdt9opjPjNEemGELzA==
   dependencies:
     body-parser "^1.19.0"
     chrome-remote-interface "^0.30.0"

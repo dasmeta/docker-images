@@ -3,6 +3,6 @@
 
 ## to publish the changes
 ```sh
-docker build . -t dasmeta/prerender:0.0.4 --no-cache --platform linux/amd64
-docker push dasmeta/prerender:0.0.4
+docker build . -t dasmeta/prerender:0.0.10 --no-cache --platform linux/amd64
+docker push dasmeta/prerender:0.0.10
 ```

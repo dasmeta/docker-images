@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "prerender": "^5.20.2",
+    "chrome-remote-interface": "^0.33.2",
+    "prerender": "^5.21.5",
     "prerender-memory-cache": "^1.0.2"
   }
 }
