@@ -1,7 +1,7 @@
-FROM php:7.3-fpm
+FROM php:8.2-fpm
 
-RUN apt update && \
-    apt install -y \
+# Upgrade system packages to latest versions to reduce vulnerabilities
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     git \
     libicu-dev \
     libzip-dev \
@@ -14,15 +14,13 @@ RUN apt update && \
     jpegoptim optipng pngquant gifsicle \
     gcc make autoconf libc-dev pkg-config libmagickwand-dev \
     default-mysql-client \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd calendar intl pdo_mysql zip opcache mysqli sockets exif \
+    && docker-php-ext-enable gd calendar intl pdo_mysql zip opcache mysqli sockets exif \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-freetype-dir=/usr/include/
-RUN docker-php-ext-install calendar gd intl pdo_mysql zip opcache mysqli sockets exif
-RUN docker-php-ext-enable calendar gd intl pdo_mysql zip opcache mysqli sockets exif
-RUN docker-php-ext-enable opcache
-
-RUN pecl install redis && echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini
-RUN pecl install imagick && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/docker-php-ext-imagic.ini
+RUN pecl install redis && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+RUN pecl install imagick && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
 COPY docker-php-ext-opcache.ini /usr/local/etc/php/conf.d
 COPY general.ini /usr/local/etc/php/conf.d
