@@ -3,7 +3,15 @@ FROM python:3.11-slim
 
 # Install system dependencies
 RUN apt-get update && \
-    apt-get install -y curl wget unzip gpg jq git make && \
+    apt-get install -y curl wget unzip gpg jq git make ca-certificates gnupg lsb-release && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Docker CLI (needed for pipeline builds)
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -42,3 +50,10 @@ RUN pip install --no-cache-dir --index-url https://pypi.org/simple/ "prefect==3.
 # Copy and install additional requirements
 COPY ./requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
+
+# Set working directory
+WORKDIR /workspace
+
+# Ensure Docker socket permissions (for CI/CD pipelines)
+RUN mkdir -p /var/run && \
+    chmod 777 /var/run

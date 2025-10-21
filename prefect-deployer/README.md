@@ -3,6 +3,6 @@
 #### Prefect Version: 3.4.23
 ### TL;DR
 ```shell
-docker build --platform linux/amd64 -t dasmeta/prefect-deployer:0.1.14 .
-docker push dasmeta/prefect-deployer:0.1.14
+docker build --platform linux/amd64 -t dasmeta/prefect-deployer:0.1.15 .
+docker push dasmeta/prefect-deployer:0.1.15
 ```
