@@ -54,6 +54,16 @@ RUN pip install -r ./requirements.txt
 # Set working directory
 WORKDIR /workspace
 
-# Ensure Docker socket permissions (for CI/CD pipelines)
+# Ensure Docker socket permissions and setup for CI/CD pipelines
 RUN mkdir -p /var/run && \
-    chmod 777 /var/run
+    chmod 777 /var/run && \
+    mkdir -p /var/lib/docker && \
+    chmod 777 /var/lib/docker
+
+# Add docker group and ensure proper permissions
+RUN groupadd -g 999 docker || true && \
+    usermod -aG docker root || true
+
+# Set environment variables for Docker-in-Docker
+ENV DOCKER_HOST=unix:///var/run/docker.sock
+ENV DOCKER_BUILDKIT=1
