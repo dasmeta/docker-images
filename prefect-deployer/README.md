@@ -1,5 +1,6 @@
 ## Dockerfile to build Prefect Ready Dockerimage
-#### For mor information visist https://www.prefect.io/
+#### For more information visit https://www.prefect.io/
+#### Prefect Version: 3.4.23
 ### TL;DR
 ```shell
 docker build --platform linux/amd64 -t dasmeta/prefect-deployer:0.1.8 .
