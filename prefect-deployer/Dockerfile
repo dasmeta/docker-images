@@ -1,69 +1,44 @@
-# Dockerfile with Prefect 3.4.23 and all required tools
-FROM python:3.11-slim
+FROM atlassian/default-image:3
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y curl wget unzip gpg jq git make ca-certificates gnupg lsb-release && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install aws-cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install
 
-# Install Docker CLI (needed for pipeline builds)
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && \
-    apt-get install -y docker-ce-cli && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install kubectl
+#Install kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
-    rm kubectl
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-# Install Helm
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
-    chmod 700 get_helm.sh && \
-    ./get_helm.sh && \
-    rm get_helm.sh
+# Install python & pip
+RUN apt-get update && \
+    apt-get install python3 python3-pip -y && \
+    ln -s /usr/bin/python3 /usr/bin/python
+
+RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+    apt-get install apt-transport-https --yes && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
+    apt-get update && \
+    apt-get install helm
 
 # Install yq
 RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && \
     chmod a+x /usr/local/bin/yq
 
-# Install AWS CLI
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf awscliv2.zip aws/
 
-# Install autotag
+# Install prefect
+RUN pip install -U "prefect==2.20.2" && \
+    pip install s3fs && \
+    pip install gcsfs && \
+    pip install adlfs
+
+
+RUN apt-get update &&  \
+    apt-get install -y curl jq
+
 RUN curl -sL https://git.io/autotag-install | sh -- && \
     curl -sL https://git.io/autotag-install | sh -s -- -b /usr/bin
 
-# Install prefect 3.4.23 and essential dependencies
-RUN pip install --no-cache-dir --index-url https://pypi.org/simple/ "prefect==3.4.23" && \
-    pip install --no-cache-dir s3fs && \
-    pip install --no-cache-dir gcsfs && \
-    pip install --no-cache-dir adlfs && \
-    pip cache purge
 
-# Copy and install additional requirements
 COPY ./requirements.txt ./requirements.txt
+
 RUN pip install -r ./requirements.txt
-
-# Set working directory
-WORKDIR /workspace
-
-# Ensure Docker socket permissions and setup for CI/CD pipelines
-RUN mkdir -p /var/run && \
-    chmod 777 /var/run && \
-    mkdir -p /var/lib/docker && \
-    chmod 777 /var/lib/docker
-
-# Add docker group and ensure proper permissions
-RUN groupadd -g 999 docker || true && \
-    usermod -aG docker root || true
-
-# Set environment variables for Docker-in-Docker
-ENV DOCKER_HOST=unix:///var/run/docker.sock
-ENV DOCKER_BUILDKIT=1
