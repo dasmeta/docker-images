@@ -28,9 +28,9 @@ RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/d
     chmod a+x /usr/local/bin/yq
 
 
-# Upgrade pip and install prefect 3.4.23
+# Upgrade pip and install prefect 3.7.1
 RUN pip install --upgrade pip && \
-    pip install -U "prefect==3.4.23" && \
+    pip install -U "prefect==3.7.1" && \
     pip install s3fs && \
     pip install gcsfs && \
     pip install adlfs
