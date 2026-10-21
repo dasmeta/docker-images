@@ -1,4 +1,5 @@
-FROM php:8.2-fpm
+# Pinned to the patch release: 8.2.35+ is required for CVE-2026-109618 / CVE-2026-109619
+FROM php:8.2.35-fpm
 
 # Upgrade system packages to latest versions to reduce vulnerabilities
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
